@@ -1,80 +1,77 @@
-import { logger } from 'inkdrop'
-import { CompositeDisposable, Disposable } from 'event-kit'
-import CodeMirror from 'codemirror'
-import { clipboard } from 'electron'
+import { CompositeDisposable } from 'event-kit';
+import CodeMirror from 'codemirror';
+import emacsKeymap from './emacs';
 
 class Plugin {
   activate() {
-    // this.vim = vimKeymap(CodeMirror)
+    this.emacs = emacsKeymap(CodeMirror);
     if (inkdrop.isEditorActive()) {
-      this.activateMode(inkdrop.getActiveEditor())
+      this.activateMode(inkdrop.getActiveEditor());
     }
-    inkdrop.onEditorLoad(this.handleEditorLoad)
+    inkdrop.onEditorLoad(this.handleEditorLoad);
   }
 
   deactivate() {
     if (this.disposables) {
-      this.disposables.dispose()
+      this.disposables.dispose();
     }
     if (inkdrop.isEditorActive()) {
-      this.deactivateMode(inkdrop.getActiveEditor())
+      this.deactivateMode(inkdrop.getActiveEditor());
     }
   }
 
   activateMode(editor) {
     const { cm } = editor;
-    this.originalKeyMap = cm.getOption('keyMap');
-
-    // cm.setOption('keyMap', 'vim')
-    // cm.on('vim-mode-change', this.handleVimModeChange)
-    // cm.on('focus', this.handleFocusEditor)
+    this.activated = true;
 
     const el = cm.getWrapperElement();
-    el.classList.add('emacs-mode')
+    el.classList.add('emacs-mode');
 
-    // this.registerCommands()
-    // this.registerExCommands()
+    this.registerCommands();
   }
 
   deactivateMode(editor) {
-    const { cm } = editor
-    if (cm && this.originalKeyMap) {
-      // cm.setOption('keyMap', this.originalKeyMap)
-      // cm.off('vim-mode-change', this.handleVimModeChange)
-      const el = cm.getWrapperElement()
-      el.classList.remove('emacs-mode')
+    const { cm } = editor;
+    if (cm && this.activated) {
+      this.activated = false;
+      const el = cm.getWrapperElement();
+      el.classList.remove('emacs-mode');
     }
   }
 
   handleEditorLoad = editor => {
-    this.activateMode(editor)
+    this.activateMode(editor);
   };
 
   registerCommands() {
-    const disposables = new CompositeDisposable()
-    const editor = inkdrop.getActiveEditor()
-    const { cm } = editor
-    const wrapper = cm.getWrapperElement()
+    const disposables = new CompositeDisposable();
+    const editor = inkdrop.getActiveEditor();
+    const { cm } = editor;
+    const wrapper = cm.getWrapperElement();
+
+    const handlers = {
+      "emacs-mode:nop": () => {},
+      "emacs-mode:exchange-point-and-mark": () => {
+        this.emacs.exchangePointAndMark(cm);
+      },
+      "emacs-mode:set-mark": () => {
+        this.emacs.setMark(cm);
+      },
+      "emacs-mode:quit": () => {
+        this.emacs.clearMark(cm);
+      },
+      "emacs-mode:copy-region": () => {
+        this.emacs.copyRegion(cm);
+      },
+      "emacs-mode:yank": () => {
+        this.emacs.yank(cm);
+      },
+    };
+
+    disposables.add(inkdrop.commands.add(wrapper, handlers));
+
+    this.disposables = disposables;
   }
 };
 
 module.exports = new Plugin();
-// module.exports = {
-
-//   activate() {
-//     inkdrop.components.registerClass(InkdropEmacsMessageDialog);
-//     inkdrop.layouts.addComponentToLayout(
-//       'modal',
-//       'InkdropEmacsMessageDialog'
-//     )
-//   },
-
-//   deactivate() {
-//     inkdrop.layouts.removeComponentFromLayout(
-//       'modal',
-//       'InkdropEmacsMessageDialog'
-//     )
-//     inkdrop.components.deleteClass(InkdropEmacsMessageDialog);
-//   }
-
-// };

@@ -1,10 +1,10 @@
 {
-  "name": "inkdrop-emacs",
+  "name": "emacs-keybindings",
   "main": "./lib/inkdrop-emacs",
-  "version": "0.0.0",
-  "description": "A short description of your package",
+  "version": "0.1.0",
+  "description": "Emacs keybindings",
   "keywords": [],
-  "repository": "https://github.com/inkdropapp/inkdrop-emacs",
+  "repository": "https://github.com/shunichi/inkdrop-emacs",
   "license": "MIT",
   "scripts": {
     "build": "babel src/ -d lib/",

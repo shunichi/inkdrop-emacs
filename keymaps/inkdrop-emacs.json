@@ -16,10 +16,15 @@
     "alt-d": "editor:delete-word-after",
     "ctrl-h": "editor:delete-char-before",
     "ctrl-k": "editor:kill-line",
-    "ctrl-y": "core:paste",
+    "ctrl-y": "emacs-mode:yank",
     "ctrl-/": "core:undo",
-    "alt-w": "core:copy",
+    "alt-w": "emacs-mode:copy-region",
     "ctrl-w": "core:cut",
-    "ctrl-s": "editor:find"
+    "ctrl-s": "editor:find",
+    "ctrl-x": "emacs-mode:nop",
+    "ctrl-x h": "editor:select-all",
+    "ctrl-x ctrl-x": "emacs-mode:exchange-point-and-mark",
+    "ctrl-space": "emacs-mode:set-mark",
+    "ctrl-g": "emacs-mode:quit"
   }
 }

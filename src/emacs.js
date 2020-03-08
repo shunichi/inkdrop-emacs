@@ -1,14 +1,9 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 
-(function(mod) {
-  if (typeof exports == "object" && typeof module == "object") // CommonJS
-    mod(require("../lib/codemirror"));
-  else if (typeof define == "function" && define.amd) // AMD
-    define(["../lib/codemirror"], mod);
-  else // Plain browser env
-    mod(CodeMirror);
-})(function(CodeMirror) {
+import { clipboard } from 'electron';
+
+module.exports = function(CodeMirror) {
   "use strict";
 
   var Pos = CodeMirror.Pos;
@@ -271,11 +266,37 @@
     clearMark(cm);
   }
 
-  CodeMirror.emacs = {kill: kill, killRegion: killRegion, repeated: repeated};
+  function exchangePointAndMark(cm) {
+    cm.setSelection(cm.getCursor("head"), cm.getCursor("anchor"));
+  }
+
+  function copyRegion(cm) {
+    const text = cm.getRange(cm.getCursor("start"), cm.getCursor("end"));
+    clipboard.writeText(text);
+    clearMark(cm);
+  }
+
+  function yank(cm) {
+    var start = cm.getCursor();
+    const text = clipboard.readText();
+    cm.replaceRange(text, start, start, "paste");
+    cm.setSelection(start, cm.getCursor());
+  }
+
+  CodeMirror.emacs = {
+    kill: kill,
+    killRegion: killRegion,
+    repeated: repeated,
+    setMark: setMark,
+    clearMark: clearMark,
+    exchangePointAndMark: exchangePointAndMark,
+    copyRegion: copyRegion,
+    yank: yank,
+  };
 
   // Actual keymap
 
-  var keyMap = CodeMirror.keyMap.emacs = CodeMirror.normalizeKeyMap({
+  var keyMap = CodeMirror.normalizeKeyMap({
     "Ctrl-W": function(cm) {kill(cm, cm.getCursor("start"), cm.getCursor("end"), true);},
     "Ctrl-K": repeated(function(cm) {
       var start = cm.getCursor(), end = cm.clipPos(Pos(start.line));
@@ -406,6 +427,7 @@
     "Ctrl-Q Tab": repeated("insertTab"),
     "Ctrl-U": addPrefixMap
   });
+  // CodeMirror.keyMap.emacs = keymap;
 
   var prefixMap = {"Ctrl-G": clearPrefix};
   function regPrefix(d) {
@@ -415,4 +437,6 @@
   }
   for (var i = 0; i < 10; ++i) regPrefix(String(i));
   regPrefix("-");
-});
+
+  return CodeMirror.emacs;
+};
