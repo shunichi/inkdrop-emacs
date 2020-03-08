@@ -1,0 +1,25 @@
+{
+  "name": "inkdrop-emacs",
+  "main": "./lib/inkdrop-emacs",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "keywords": [],
+  "repository": "https://github.com/inkdropapp/inkdrop-emacs",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel src/ -d lib/",
+    "dev": "babel src/ -s -d lib/ --watch"
+  },
+  "engines": {
+    "inkdrop": "^4.x"
+  },
+  "dependencies": {
+    "core-js": "^2.6.11"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.8.7"
+  }
+}

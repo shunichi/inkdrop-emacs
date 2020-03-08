@@ -1,0 +1,25 @@
+{
+  "body": {
+  },
+  ".CodeMirror.emacs-mode textarea": {
+    "ctrl-a": "editor:go-line-start",
+    "ctrl-e": "editor:go-line-end",
+    "ctrl-n": "editor:go-line-down",
+    "ctrl-p": "editor:go-line-up",
+    "ctrl-f": "editor:go-char-right",
+    "ctrl-b": "editor:go-char-left",
+    "alt-f": "editor:go-word-right",
+    "alt-b": "editor:go-word-left",
+    "ctrl-v": "editor:go-page-down",
+    "alt-v": "editor:go-page-up",
+    "ctrl-d": "editor:delete-char-after",
+    "alt-d": "editor:delete-word-after",
+    "ctrl-h": "editor:delete-char-before",
+    "ctrl-k": "editor:kill-line",
+    "ctrl-y": "core:paste",
+    "ctrl-/": "core:undo",
+    "alt-w": "core:copy",
+    "ctrl-w": "core:cut",
+    "ctrl-s": "editor:find"
+  }
+}
