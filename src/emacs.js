@@ -2,6 +2,7 @@
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 
 import { clipboard } from 'electron';
+import KillRing from './killRing';
 
 module.exports = function(CodeMirror) {
   "use strict";
@@ -11,17 +12,17 @@ module.exports = function(CodeMirror) {
 
   // Kill 'ring'
 
-  var killRing = [];
+  var killRing = new KillRing();
   function addToRing(str) {
     killRing.push(str);
-    if (killRing.length > 50) killRing.shift();
+    clipboard.writeText(str);
   }
   function growRingTop(str) {
-    if (!killRing.length) return addToRing(str);
-    killRing[killRing.length - 1] += str;
+    killRing.grow(str);
+    clipboard.writeText(killRing.top());
   }
-  function getFromRing(n) { return killRing[killRing.length - (n ? Math.min(n, 1) : 1)] || ""; }
-  function popFromRing() { if (killRing.length > 1) killRing.pop(); return getFromRing(); }
+  function getFromRing(n) { return killRing.top(); }
+  function popFromRing() { return killRing.yankPop(); }
 
   var lastKill = null;
 
@@ -270,28 +271,65 @@ module.exports = function(CodeMirror) {
     cm.setSelection(cm.getCursor("head"), cm.getCursor("anchor"));
   }
 
-  function copyRegion(cm) {
-    const text = cm.getRange(cm.getCursor("start"), cm.getCursor("end"));
-    clipboard.writeText(text);
+  function killRingSave(cm) {
+    const text = cm.getSelection();
+    addToRing(text);
     clearMark(cm);
+  }
+
+  function killRegion(cm) {
+    const text = cm.getSelection();
+    kill(cm, cm.getCursor("start"), cm.getCursor("end"), true);
+  }
+
+  const _killLine = repeated(function(cm) {
+    var start = cm.getCursor(), end = cm.clipPos(Pos(start.line));
+    var text = cm.getRange(start, end);
+    if (!/\S/.test(text)) {
+      text += "\n";
+      end = Pos(start.line + 1, 0);
+    }
+    kill(cm, start, end, "grow", text);
+  })
+
+  function killLine(cm) {
+    _killLine(cm);
+  }
+
+  function killWord(cm) {
+    killTo(cm, byWord, 1, "grow");
+  }
+
+  function backwardKillWord(cm) {
+    killTo(cm, byWord, -1, "grow");
   }
 
   function yank(cm) {
     var start = cm.getCursor();
     const text = clipboard.readText();
+    killRing.addIfNotEqualsFirstText(text);
     cm.replaceRange(text, start, start, "paste");
     cm.setSelection(start, cm.getCursor());
   }
 
+  function yankPop(cm) {
+    cm.replaceSelection(popFromRing(), "around", "paste");
+  }
+
   CodeMirror.emacs = {
-    kill: kill,
-    killRegion: killRegion,
-    repeated: repeated,
-    setMark: setMark,
-    clearMark: clearMark,
-    exchangePointAndMark: exchangePointAndMark,
-    copyRegion: copyRegion,
-    yank: yank,
+    kill,
+    killRegion,
+    repeated,
+    setMark,
+    clearMark,
+    exchangePointAndMark,
+    killRegion,
+    killRingSave,
+    killLine,
+    killWord,
+    backwardKillWord,
+    yank,
+    yankPop,
   };
 
   // Actual keymap

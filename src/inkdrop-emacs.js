@@ -50,7 +50,6 @@ class Plugin {
     const wrapper = cm.getWrapperElement();
 
     const handlers = {
-      "emacs-mode:nop": () => {},
       "emacs-mode:exchange-point-and-mark": () => {
         this.emacs.exchangePointAndMark(cm);
       },
@@ -60,12 +59,33 @@ class Plugin {
       "emacs-mode:quit": () => {
         this.emacs.clearMark(cm);
       },
-      "emacs-mode:copy-region": () => {
-        this.emacs.copyRegion(cm);
-      },
       "emacs-mode:yank": () => {
         this.emacs.yank(cm);
       },
+      "emacs-mode:yank-pop": () => {
+        this.emacs.yankPop(cm);
+      },
+      "emacs-mode:kill-word": () => {
+        this.emacs.killWord(cm);
+      },
+      "emacs-mode:backward-kill-word": () => {
+        this.emacs.backwardKillWord(cm);
+      },
+      "emacs-mode:kill-line": () => {
+        this.emacs.killLine(cm);
+      },
+      "emacs-mode:kill-region": () => {
+        this.emacs.killRegion(cm);
+      },
+      "emacs-mode:kill-ring-save": () => {
+        this.emacs.killRingSave(cm);
+      },
+      // "emacs-mode:kill-sentence": () => {
+      // },
+      // "emacs-mode:backward-kill-sentence": () => {
+      // },
+      // "emacs-mode:kill-sexp": () => {
+      // },
     };
 
     disposables.add(inkdrop.commands.add(wrapper, handlers));
