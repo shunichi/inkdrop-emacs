@@ -12,6 +12,9 @@ class Plugin {
   }
 
   deactivate() {
+    if (this.emacs) {
+      this.emacs.dispose();
+    }
     if (this.disposables) {
       this.disposables.dispose();
     }
