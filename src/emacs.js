@@ -350,7 +350,6 @@ module.exports = function(CodeMirror) {
   CodeMirror.emacs = {
     dispose,
     kill,
-    killRegion,
     repeated,
     setMark,
     clearMark,
