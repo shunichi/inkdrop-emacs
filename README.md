@@ -46,6 +46,6 @@
 
 ## Key customizations
 
-Default vim keymaps are defined [here](https://github.com/shunichi/inkdrop-emacs/blob/master/keymaps/inkdrop-emacs.json) and you can override them in your `keymap.cson` file.
+Default keymaps are defined [here](https://github.com/shunichi/inkdrop-emacs/blob/master/keymaps/inkdrop-emacs.json) and you can override them in your `keymap.cson` file.
 
 CSS selectors for this plugin is `.CodeMirror.emacs-mode`.
