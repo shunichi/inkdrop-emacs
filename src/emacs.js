@@ -343,6 +343,18 @@ module.exports = function(CodeMirror) {
     }
   }
 
+  function beginningOfBuffer(cm) {
+    const newHead = Pos(cm.firstLine(), 0);
+    const newAnchor = cm.getExtending() ? cm.getCursor('anchor') : newHead;
+    cm.setSelection(newAnchor, newHead);
+  }
+
+  function endOfBuffer(cm) {
+    const newHead = Pos(cm.lastLine());
+    const newAnchor = cm.getExtending() ? cm.getCursor('anchor') : newHead;
+    cm.setSelection(newAnchor, newHead);
+  }
+
   function dispose() {
     forgetYank();
   }
@@ -361,6 +373,8 @@ module.exports = function(CodeMirror) {
     backwardKillWord,
     yank,
     yankPop,
+    beginningOfBuffer,
+    endOfBuffer,
   };
 
   // Actual keymap

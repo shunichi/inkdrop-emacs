@@ -12,6 +12,8 @@
     "alt-b": "editor:go-word-left",
     "ctrl-v": "editor:go-page-down",
     "alt-v": "editor:go-page-up",
+    "alt-<": "emacs-mode:beginning-of-buffer",
+    "alt->": "emacs-mode:end-of-buffer",
     "ctrl-d": "editor:delete-char-after",
     "alt-d": "emacs-mode:kill-word",
     "ctrl-h": "editor:delete-char-before",
@@ -24,6 +26,7 @@
     "ctrl-x": false,
     "ctrl-x ctrl-x": "emacs-mode:exchange-point-and-mark",
     "ctrl-x h": "editor:select-all",
+    "ctrl-x ctrl-s": "core:save-note",
     "ctrl-/": "core:undo",
     "ctrl-s": "editor:find",
     "ctrl-g": "emacs-mode:quit"

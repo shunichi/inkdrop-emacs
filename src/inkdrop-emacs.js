@@ -53,6 +53,12 @@ class Plugin {
     const wrapper = cm.getWrapperElement();
 
     const handlers = {
+      "emacs-mode:beginning-of-buffer": () => {
+        this.emacs.beginningOfBuffer(cm);
+      },
+      "emacs-mode:end-of-buffer": () => {
+        this.emacs.endOfBuffer(cm);
+      },
       "emacs-mode:exchange-point-and-mark": () => {
         this.emacs.exchangePointAndMark(cm);
       },
