@@ -1,6 +1,4 @@
 {
-  "body": {
-  },
   ".CodeMirror.emacs-mode textarea": {
     "ctrl-f": "editor:go-char-right",
     "ctrl-b": "editor:go-char-left",
