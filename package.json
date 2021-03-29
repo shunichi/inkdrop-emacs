@@ -1,7 +1,7 @@
 {
   "name": "emacs-keybindings",
   "main": "./lib/inkdrop-emacs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Emacs keybindings",
   "keywords": [],
   "repository": "https://github.com/shunichi/inkdrop-emacs",
