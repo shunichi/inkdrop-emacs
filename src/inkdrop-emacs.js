@@ -3,12 +3,22 @@ import CodeMirror from 'codemirror';
 import emacsKeymap from './emacs';
 
 class Plugin {
+  config = {
+    disableDefaultCtrlKKeybindings: {
+      type: 'boolean',
+      default: false,
+    }
+  }
+
   activate() {
     this.emacs = emacsKeymap(CodeMirror);
     if (inkdrop.isEditorActive()) {
       this.activateMode(inkdrop.getActiveEditor());
     }
     inkdrop.onEditorLoad(this.handleEditorLoad);
+    if (inkdrop.config.get('emacs-keybindings.disableDefaultCtrlKKeybindings', false)) {
+      this.removeCtrlKKeymaps();
+    }
   }
 
   deactivate() {
@@ -100,6 +110,11 @@ class Plugin {
     disposables.add(inkdrop.commands.add(wrapper, handlers));
 
     this.disposables = disposables;
+  }
+
+  removeCtrlKKeymaps() {
+    const bindings = inkdrop.keymaps.keyBindings;
+    inkdrop.keymaps.keyBindings = bindings.filter(a => !a.keystrokes.startsWith('ctrl-k '));
   }
 };
 

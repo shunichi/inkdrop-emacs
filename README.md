@@ -53,7 +53,16 @@ Default keymaps are defined [here](https://github.com/shunichi/inkdrop-emacs/blo
 
 CSS selectors for this plugin is `.CodeMirror.emacs-mode`.
 
+## Disabling inkdrop default ctrl-k keybindings
+
+Inkdrop has multi-keystroke keybindings with `ctrl-k` prefix by default on Linux (and maybe Windows), so this plugin's `ctrl-k` (`emacs-mode:kill-line` command) is executed with some delay.
+
+If you want to delete default `ctrl-k` keybindings, check `Disable Default Ctrl K Keybindings` in emacs-keybindings plugin settings and restart Inkdrop.
+
 ## Changes
+
+### 0.3.0
+* Add "Disable Default Ctrl K Keybindings" config option
 
 ### 0.2.0
 * Add some keybindings

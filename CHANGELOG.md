@@ -1,3 +1,6 @@
+## 0.3.0
+* Add "Disable Default Ctrl K Keybindings" config option
+
 ## 0.2.0
 * Add some keybindings
   * `ctrl-x ctrl-s` - `core:save-note`
